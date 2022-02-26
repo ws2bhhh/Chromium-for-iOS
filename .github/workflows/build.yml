@@ -14,6 +14,56 @@ jobs:
     steps:
       - name: Build Chromium for iOS
         run: |
-          wget https://github.com/dylanaraps/neofetch/raw/master/neofetch
-          chmod a+x neofetch
-          ./neofetch
+          name: Build
+
+on:
+  push:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-11
+    steps:
+      - name: Build Chromium for iOS
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        run: |
+          rm -rf depot_tools
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          export PATH="$PATH:$(pwd)/depot_tools"
+          rm -rf chromium
+          mkdir chromium
+          cd chromium
+          fetch --no-history ios
+          du -sh src
+          rm -rf .gclient
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/1001e11abe905007b82ce52806b8d6ba6da519a3/.gclient
+          cd src
+          pushd ~/
+          rm -rf .setup-gn
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/9daf1a68673228ef9978f1a09cd50d7cb9580f75/.setup-gn
+          brew install gnu-sed p7zip
+          gsed "s/API_KEY/$API_KEY" -i .setup-gn
+          gsed "s/CLIENT_ID/$CLIENT_ID" -i .setup-gn
+          gsed "s/CLIENT_SECRET/$CLIENT_SECRET" -i .setup-gn
+          popd
+          autoninja -C out/Release-iphoneos gn_all
+          pushd out/Release-iphoneos
+          7z a Chromium.app.zip Chromium.app
+          cp Chromium.app.zip ~/
+          cp Chromium.app.zip ~/chromium/src/
+          popd
+          
+      - name: Upload release
+        uses: svenstaro/upload-release-action@2.2.1
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: Chromium.app.zip
+          tag: v1.0
+          file_glob: true

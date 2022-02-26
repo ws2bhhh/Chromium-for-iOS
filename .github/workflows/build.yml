@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-11
+    steps:
+      - name: Build Chromium for iOS
+        run: |
+          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          export PATH="$PATH:$(pwd)/depot_tools"
+          mkdir chromium
+          cd chromium
+          fetch --no-history ios
+          cd src
+          cat ~/.setup-gn

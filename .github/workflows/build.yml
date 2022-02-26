@@ -19,7 +19,7 @@ jobs:
           pushd depot_tools
           git reset --hard HEAD^
           popd
-          echo -e 'export PATH=$PATH:'"$(pwd)"'/depot_tools' >> .bashrc
+          echo "$(pwd)/depot_tools" >> $GITHUB_PATH
 
       - name: Clone Chromium for iOS
         run: |

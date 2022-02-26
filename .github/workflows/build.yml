@@ -36,9 +36,9 @@ jobs:
           gsed "s/CLIENT_ID/$CLIENT_ID/g" -i .setup-gn
           gsed "s/CLIENT_SECRET/$CLIENT_SECRET/g" -i .setup-gn
           popd
-          gn gen out/Release-iphoneos
-          autoninja -C out/Release-iphoneos gn_all
-          pushd out/Release-iphoneos
+          gn gen out/Debug-iphoneos
+          autoninja -C out/Debug-iphoneos gn_all
+          pushd out/Debug-iphoneos
           7z a Chromium.app.zip Chromium.app
           cp Chromium.app.zip ~/
           cp Chromium.app.zip ~/chromium/src/

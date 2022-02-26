@@ -25,12 +25,12 @@ jobs:
           mkdir chromium
           cd chromium
           fetch --no-history ios
-          git fetch --tags
-          git checkout tags/98.0.4758.97
-          gclient sync --no-history --shallow --reset
           rm -rf .gclient
           wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/1001e11abe905007b82ce52806b8d6ba6da519a3/.gclient
           cd src
+          git fetch --tags
+          git checkout tags/98.0.4758.97
+          gclient sync --no-history --shallow --reset
           pushd ~/
           rm -rf .setup-gn
           wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/9daf1a68673228ef9978f1a09cd50d7cb9580f75/.setup-gn
@@ -39,9 +39,9 @@ jobs:
           gsed "s/CLIENT_ID/$CLIENT_ID/g" -i .setup-gn
           gsed "s/CLIENT_SECRET/$CLIENT_SECRET/g" -i .setup-gn
           popd
-          gn gen out/Debug-iphoneos
-          autoninja -C out/Debug-iphoneos gn_all
-          pushd out/Debug-iphoneos
+          gn gen out/Release-iphoneos
+          autoninja -C out/Release-iphoneos gn_all
+          pushd out/Release-iphoneos
           7z a Chromium.app.zip Chromium.app
           cp Chromium.app.zip ~/
           cp Chromium.app.zip ~/chromium/src/

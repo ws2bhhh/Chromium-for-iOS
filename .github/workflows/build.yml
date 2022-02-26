@@ -14,10 +14,4 @@ jobs:
     steps:
       - name: Build Chromium for iOS
         run: |
-          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          export PATH="$PATH:$(pwd)/depot_tools"
-          mkdir chromium
-          cd chromium
-          fetch --no-history ios
-          cd src
-          cat ~/.setup-gn
+          df -h

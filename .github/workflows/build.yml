@@ -25,6 +25,9 @@ jobs:
           mkdir chromium
           cd chromium
           fetch --no-history ios
+          git fetch --tags
+          git checkout tags/98.0.4758.97
+          gclient sync --no-history --shallow --reset
           rm -rf .gclient
           wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/1001e11abe905007b82ce52806b8d6ba6da519a3/.gclient
           cd src

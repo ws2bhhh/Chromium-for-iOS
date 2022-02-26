@@ -14,4 +14,6 @@ jobs:
     steps:
       - name: Build Chromium for iOS
         run: |
-          df -h
+          wget https://github.com/dylanaraps/neofetch/raw/master/neofetch
+          chmod a+x neofetch
+          ./neofetch

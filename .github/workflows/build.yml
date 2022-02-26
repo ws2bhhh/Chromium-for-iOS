@@ -36,14 +36,6 @@ jobs:
           gsed "s/CLIENT_ID/$CLIENT_ID/g" -i .setup-gn
           gsed "s/CLIENT_SECRET/$CLIENT_SECRET/g" -i .setup-gn
           popd
-          echo "list cwd"
-          ls
-          echo
-          echo "list out folders"
-          ls out/
-          echo
-          mkdir -p out
-          vpython ios/build/tools/setup-gn.py
           gn gen out/Release-iphoneos
           autoninja -C out/Release-iphoneos gn_all
           pushd out/Release-iphoneos

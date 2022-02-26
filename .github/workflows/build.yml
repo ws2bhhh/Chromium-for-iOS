@@ -35,14 +35,17 @@ jobs:
 
       - name: Fetch all of Chromium's tags
         run: |
+          cd chromium/src
           git fetch --tags
 
       - name: Checkout latest stable Chromium for iOS
         run: |
+          cd chromium/src
           git checkout tags/98.0.4758.97 Pull third-party deps
 
       - name: Sync up third-party dependencies
         run: |
+          cd chromium/src
           gclient sync --no-history --shallow --reset
 
       - name: Download Chromium for iOS build configurations
@@ -51,6 +54,7 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
+          cd chromium/src
           pushd ~/
           rm -rf .setup-gn
           wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/9daf1a68673228ef9978f1a09cd50d7cb9580f75/.setup-gn
@@ -62,14 +66,17 @@ jobs:
 
       - name: Generate build directories
         run: |
+          cd chromium/src
           gn gen out/Release-iphoneos
 
       - name: Compile Chromium for iOS
         run: |
+          cd chromium/src
           autoninja -C out/Release-iphoneos gn_all
 
       - name: Prepare Chromium for iOS binaries for release
         run: |
+          cd chromium/src
           pushd out/Release-iphoneos
           7z a Chromium.app.zip Chromium.app
           cp Chromium.app.zip ~/

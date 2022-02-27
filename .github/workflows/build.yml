@@ -27,9 +27,6 @@ jobs:
           ls -lha /Users/runner/.vpython-root
           echo
           sudo chmod -R 755 /Users/runner/.vpython-root
-          sudo chmod -Rf 755 /Users/runner/.vpython-root
-          chmod -R 755 /Users/runner/.vpython-root
-          chmod -Rf 755 /Users/runner/.vpython-root
           echo
           echo ".vpython-root permissions after"
           ls -lha /Users/runner/.vpython-root

@@ -16,13 +16,7 @@ jobs:
         run: |
           rm -rf depot_tools
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          export PATH="$(pwd)/depot_tools:$PATH"
-          vpython3 --version
-          vpython --version
-          sudo chmod -Rf 755 /Users/runner/.vpython_cipd_cache
-          sudo chmod -Rf 755 /Users/runner/.vpython-root
-          vpython3 -m pip install configparser
-          vpython -m pip install configparser
+        continue-on-error: true
 
       - name: Clone Chromium for iOS
         run: |
@@ -48,7 +42,13 @@ jobs:
         run: |
           export PATH="$(pwd)/depot_tools:$PATH"
           cd chromium/src
-          gclient sync --no-history --shallow --reset
+          rm -rf .vpython .vpython3
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/255db913278c20e3a142b7e3295588bed7db7bc3/.vpython
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/255db913278c20e3a142b7e3295588bed7db7bc3/.vpython3
+          git add .vpython .vpython3
+          git commit -m "Update .vpython and .vpython3"
+          gclient sync --no-history --shallow
+        continue-on-error: true
 
       - name: Download Chromium for iOS build configurations
         env:

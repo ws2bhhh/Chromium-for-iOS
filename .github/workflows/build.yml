@@ -18,7 +18,7 @@ jobs:
           rm -rf depot_tools
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
           pushd depot_tools
-          git reset --hard HEAD^
+          git reset --hard 9ae2169b6375de18252dcaa7e61787a19272dc90
           git --no-pager log --decorate=short --pretty=oneline -n1
           popd
           echo "$(pwd)/depot_tools" >> $GITHUB_PATH

@@ -41,7 +41,7 @@ jobs:
       - name: Checkout latest stable Chromium for iOS
         run: |
           cd chromium/src
-          git checkout tags/98.0.4758.97 Pull third-party deps
+          git checkout tags/98.0.4758.97
 
       - name: Sync up third-party dependencies
         run: |

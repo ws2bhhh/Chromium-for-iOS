@@ -32,3 +32,4 @@ jobs:
           ls -lha /Users/runner/.vpython-root
           echo
           vpython3 -m pip install configparser
+          vpython -m pip install configparser

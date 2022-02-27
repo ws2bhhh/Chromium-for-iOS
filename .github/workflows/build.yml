@@ -16,81 +16,8 @@ jobs:
         run: |
           rm -rf depot_tools
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          touch lol/lol
+          touch lol
+          git add lol
+          git commit -m "lol"
         continue-on-error: true
-
-      - name: Clone Chromium for iOS
-        run: |
-          export PATH="$(pwd)/depot_tools:$PATH"
-          rm -rf chromium
-          mkdir chromium
-          cd chromium
-          fetch --no-history ios
-          rm -rf .gclient
-          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/1001e11abe905007b82ce52806b8d6ba6da519a3/.gclient
-
-      - name: Fetch all of Chromium's tags
-        run: |
-          cd chromium/src
-          git fetch --tags
-
-      - name: Checkout latest stable Chromium for iOS
-        run: |
-          cd chromium/src
-          git checkout tags/98.0.4758.97
-
-      - name: Sync up third-party dependencies
-        run: |
-          export PATH="$(pwd)/depot_tools:$PATH"
-          cd chromium/src
-          rm -rf .vpython .vpython3
-          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/255db913278c20e3a142b7e3295588bed7db7bc3/.vpython
-          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/255db913278c20e3a142b7e3295588bed7db7bc3/.vpython3
-          git add .vpython .vpython3
-          git commit -m "Update .vpython and .vpython3"
-          gclient sync --no-history --shallow
-        continue-on-error: true
-
-      - name: Download Chromium for iOS build configurations
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        run: |
-          cd chromium/src
-          pushd ~/
-          rm -rf .setup-gn
-          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/9daf1a68673228ef9978f1a09cd50d7cb9580f75/.setup-gn
-          brew install gnu-sed
-          gsed "s/API_KEY/$API_KEY/g" -i .setup-gn
-          gsed "s/CLIENT_ID/$CLIENT_ID/g" -i .setup-gn
-          gsed "s/CLIENT_SECRET/$CLIENT_SECRET/g" -i .setup-gn
-          popd
-
-      - name: Generate build directories
-        run: |
-          export PATH="$(pwd)/depot_tools:$PATH"
-          cd chromium/src
-          gn gen out/Release-iphoneos
-
-      - name: Compile Chromium for iOS
-        run: |
-          export PATH="$(pwd)/depot_tools:$PATH"
-          cd chromium/src
-          autoninja -C out/Release-iphoneos gn_all
-
-      - name: Prepare Chromium for iOS binaries for release
-        run: |
-          cd chromium/src
-          pushd out/Release-iphoneos
-          7z a Chromium.app.zip Chromium.app
-          cp Chromium.app.zip ~/
-          cp Chromium.app.zip ~/chromium/src/
-          popd
-
-      - name: Upload release
-        uses: svenstaro/upload-release-action@2.2.1
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: Chromium.app.zip
-          tag: v1.0
-          file_glob: true

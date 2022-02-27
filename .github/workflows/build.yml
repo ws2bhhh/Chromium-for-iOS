@@ -14,10 +14,10 @@ jobs:
     steps:
       - name: Clone depot_tools
         run: |
-          rm -rf depot_tools
-          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+          mkdir depot_tools
           cd depot_tools
+          git init
           touch lol
           git add lol
           git commit -m "lol"
-        continue-on-error: true
+          git status

@@ -16,7 +16,6 @@ jobs:
         run: |
           rm -rf depot_tools
           git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          touch lol/lol
           touch lol
           git add lol
           git commit -m "lol"

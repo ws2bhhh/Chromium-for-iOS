@@ -14,6 +14,18 @@ jobs:
     steps:
       - name: Clone depot_tools
         run: |
+          echo $PATH
           which python3
           which python
           which python2
+          python3 --version
+          python2 --version
+          python --version
+          echo "/usr/local/opt/python/libexec/bin" >> $GITHUB_PATH
+          echo $PATH
+          python3 --version
+          python2 --version
+          python --version
+          which python3
+          which python2
+          which python

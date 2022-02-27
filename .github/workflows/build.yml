@@ -21,7 +21,7 @@ jobs:
           python3 --version
           python2 --version
           python --version
-          echo "/usr/local/opt/python/libexec/bin" >> $GITHUB_PATH
+          export PATH="/usr/local/opt/python/libexec/bin:$PATH"
           echo $PATH
           python3 --version
           python2 --version

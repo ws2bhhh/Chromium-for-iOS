@@ -14,14 +14,6 @@ jobs:
     steps:
       - name: Clone depot_tools
         run: |
-          brew reinstall python3
-          echo "VPYTHON_BYPASS=manually managed python not supported by chrome operations" >> $GITHUB_ENV
-          echo "DEPOT_TOOLS_UPDATE=0" >> $GITHUB_ENV
-          rm -rf depot_tools
-          git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-          echo "$(pwd)/depot_tools" >> $GITHUB_PATH
-          echo "gsutil without brew path"
-          gsutil
-          echo
-          echo "gsutil with brew path"
-          echo "/usr/local/opt/python/libexec/bin" >> $GITHUB_PATH
+          which python3
+          which python
+          which python2

@@ -47,7 +47,6 @@ jobs:
           git add .vpython .vpython3
           git commit -m "Update .vpython and .vpython3"
           gclient sync --no-history --shallow
-        continue-on-error: true
 
       - name: Download Chromium for iOS build configurations
         env:
@@ -66,9 +65,22 @@ jobs:
           popd
 
       - name: Generate build directories
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
           export PATH="$(pwd)/depot_tools:$PATH"
           cd chromium/src
+          brew install gnu-sed
+          mkdir -p out/Release-iphoneos
+          pushd out/Release-iphoneos
+          rm -rf args.gn || true
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/20aaee68f7d8a4a6fda18301f33c5c974c92e5c7/args.gn
+          gsed "s/API_KEY/$API_KEY/g" -i args.gn
+          gsed "s/CLIENT_ID/$CLIENT_ID/g" -i args.gn
+          gsed "s/CLIENT_SECRET/$CLIENT_SECRET/g" -i args.gn
+          popd
           gn gen out/Release-iphoneos
 
       - name: Compile Chromium for iOS

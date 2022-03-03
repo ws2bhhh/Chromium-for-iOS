@@ -25,7 +25,7 @@ jobs:
           cd chromium
           fetch --no-history ios
           rm -rf .gclient
-          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/1001e11abe905007b82ce52806b8d6ba6da519a3/.gclient
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/c5d729d58f1b731de3f14b7a1e88f537c6151c43/.gclient
 
       - name: Download Chromium for iOS build configurations
         run: |
@@ -34,8 +34,10 @@ jobs:
           rm -rf .vpython .vpython3
           wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/255db913278c20e3a142b7e3295588bed7db7bc3/.vpython
           wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/255db913278c20e3a142b7e3295588bed7db7bc3/.vpython3
-          git add .vpython .vpython3
-          git commit -m "Update .vpython and .vpython3"
+          pushd ios/build
+          rm -rf chrome_build.gni
+          wget https://gist.github.com/growtopiajaw/9a218e197be196b6f6adffc3c68344b6/raw/c5d729d58f1b731de3f14b7a1e88f537c6151c43/chrome_build.gni
+          popd
 
       - name: Generate build directories
         env:
@@ -68,7 +70,7 @@ jobs:
           pushd out/Release-iphoneos
           mkdir Payload
           mv Chromium.app Payload/
-          7z a -tzip -mx=9 -mmt=4 Chromium.ipa Payload
+          7z a -tzip -mx=9 Chromium.ipa Payload
           cp Chromium.ipa ~/
           cp Chromium.ipa ~/chromium/src/
           popd
